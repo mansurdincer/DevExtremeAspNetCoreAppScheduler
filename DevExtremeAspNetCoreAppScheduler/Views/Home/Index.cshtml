@@ -1,0 +1,60 @@
+@using DevExtremeAspNetCoreAppScheduler.Models
+
+<h2>Home</h2>
+
+@model IEnumerable<MaintenancePlan>
+
+@(Html.DevExtreme().Scheduler()
+    .ID("scheduler")
+    .DataSource(d => d.Mvc()
+        .Controller("MaintenancePlans")
+        .Key("Id")
+        .LoadAction("Get")
+        .UpdateAction("Put")
+        .InsertAction("Post")
+        .DeleteAction("Delete")
+    )
+    //.TimeZone("Turkey/Istanbul")
+    .DateSerializationFormat("yyyy-MM-ddTHH:mm:ssZ")
+    //.RemoteFiltering(true)
+    .Views(new[] {
+        SchedulerViewType.Day,
+        SchedulerViewType.Week,
+        SchedulerViewType.WorkWeek,
+        SchedulerViewType.Month,
+        SchedulerViewType.Agenda,
+        SchedulerViewType.TimelineDay,
+        SchedulerViewType.TimelineWeek,
+        SchedulerViewType.TimelineMonth
+
+    })
+    .CurrentView(SchedulerViewType.Month)
+    .FirstDayOfWeek(FirstDayOfWeek.Monday)
+    .StartDayHour(7)
+    .EndDayHour(19)
+    .Height(600)
+
+    .TextExpr("Text")
+    .DescriptionExpr("Description")
+    .StartDateExpr("StartDate")
+    .EndDateExpr("EndDate")
+    .AllDayExpr("AllDay")
+    .RecurrenceRuleExpr("RecurrenceRule")
+    .RecurrenceExceptionExpr("RecurrenceException")
+
+    .Resources(r =>
+    {
+        r.Add()
+            .FieldExpr("EquipmentId")
+            .UseColorAsDefault(true)
+            .ColorExpr("Color")
+            .DataSource(d => d.Mvc()
+                .Controller("Equipments")
+                .Key("Id")
+                .LoadAction("GetAll")
+            )
+            .DisplayExpr("Location")
+            .ValueExpr("Id");
+    })
+
+)
